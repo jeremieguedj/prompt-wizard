@@ -23,7 +23,8 @@ export function GeneratedPrompt({ data }: GeneratedPromptProps) {
       return "Start filling in the fields above to generate your prompt...";
     }
 
-    return `# ${data.name || "Untitled Prompt"}\n\n${sections.join("\n\n")}`;
+    const header = data.name ? `# ${data.name}\n\n` : "";
+    return `${header}${sections.join("\n\n")}`;
   };
 
   const promptText = generateText();

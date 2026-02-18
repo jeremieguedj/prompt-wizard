@@ -86,7 +86,7 @@ export const PROMPT_FIELDS: PromptField[] = [
 ];
 
 export const DEFAULT_PROMPT_DATA: PromptData = {
-  name: "Untitled Prompt",
+  name: "",
   title: "",
   short_description: "",
   design_language: "",
