@@ -71,10 +71,14 @@ create trigger on_auth_user_created
 alter table public.profiles enable row level security;
 alter table public.prompts enable row level security;
 
--- Profiles: users can read/update their own profile
+-- Profiles: users can read/insert/update their own profile
 create policy "Users can view own profile"
   on public.profiles for select
   using (auth.uid() = id);
+
+create policy "Users can insert own profile"
+  on public.profiles for insert
+  with check (auth.uid() = id);
 
 create policy "Users can update own profile"
   on public.profiles for update

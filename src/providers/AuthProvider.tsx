@@ -34,20 +34,44 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const supabase = createClient();
 
   const fetchProfile = useCallback(
-    async (userId: string) => {
+    async (authUser: User) => {
       const { data } = await supabase
         .from("profiles")
         .select("*")
-        .eq("id", userId)
+        .eq("id", authUser.id)
         .single();
-      setProfile(data);
+
+      if (data) {
+        setProfile(data);
+      } else {
+        // Profile doesn't exist yet — create one (handles cases where the
+        // database trigger didn't fire, e.g. OAuth or anonymous sign-ins)
+        const displayName =
+          authUser.user_metadata?.display_name ||
+          authUser.user_metadata?.full_name ||
+          authUser.user_metadata?.name ||
+          authUser.email?.split("@")[0] ||
+          "Prompt Wizard";
+
+        const { data: newProfile } = await supabase
+          .from("profiles")
+          .upsert({
+            id: authUser.id,
+            email: authUser.email ?? null,
+            display_name: displayName,
+          })
+          .select()
+          .single();
+
+        setProfile(newProfile);
+      }
     },
     [supabase]
   );
 
   const refreshProfile = useCallback(async () => {
     if (user) {
-      await fetchProfile(user.id);
+      await fetchProfile(user);
     }
   }, [user, fetchProfile]);
 
@@ -59,7 +83,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         } = await supabase.auth.getUser();
         setUser(user);
         if (user) {
-          await fetchProfile(user.id);
+          await fetchProfile(user);
         }
       } catch {
         // Supabase not configured — continue as anonymous
@@ -75,7 +99,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         async (_event, session) => {
           setUser(session?.user ?? null);
           if (session?.user) {
-            await fetchProfile(session.user.id);
+            await fetchProfile(session.user);
           } else {
             setProfile(null);
           }
