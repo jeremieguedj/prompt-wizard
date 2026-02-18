@@ -34,17 +34,17 @@ export function FieldCard({ field, value, onChange }: FieldCardProps) {
       {/* Header */}
       <div className="mb-3 flex items-start justify-between gap-4">
         <div>
-          <h3 className="font-heading text-xs text-neon-cyan leading-relaxed">
+          <h3 className="font-heading text-sm text-neon-cyan leading-relaxed">
             {field.label}
           </h3>
-          <p className="mt-1 font-body text-sm text-text-muted leading-relaxed">
+          <p className="mt-1.5 font-body text-base text-text-secondary leading-relaxed">
             {field.description}
           </p>
         </div>
 
         {/* XP indicator */}
         <div className="flex flex-col items-end shrink-0">
-          <span className="font-code text-xs text-neon-purple">
+          <span className="font-code text-sm text-neon-purple">
             {xpValue}/{field.maxXP} XP
           </span>
           <div className="mt-1.5 h-1.5 w-20 overflow-hidden rounded-full bg-sw-surface-light">

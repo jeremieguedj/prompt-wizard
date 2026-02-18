@@ -39,7 +39,7 @@ export function GeneratedPrompt({ data }: GeneratedPromptProps) {
   return (
     <div className="rounded-xl border border-sw-border bg-sw-surface/80 backdrop-blur-sm">
       <div className="flex items-center justify-between border-b border-sw-border px-5 py-3">
-        <h3 className="font-heading text-xs text-neon-pink">
+        <h3 className="font-heading text-sm text-neon-pink">
           GENERATED PROMPT
         </h3>
         {hasContent && (
@@ -52,7 +52,7 @@ export function GeneratedPrompt({ data }: GeneratedPromptProps) {
           </Button>
         )}
       </div>
-      <pre className="max-h-96 overflow-auto whitespace-pre-wrap p-5 font-code text-sm leading-relaxed text-text-primary">
+      <pre className="max-h-96 overflow-auto whitespace-pre-wrap p-5 font-code text-base leading-relaxed text-text-primary">
         {promptText}
       </pre>
     </div>

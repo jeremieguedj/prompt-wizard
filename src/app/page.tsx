@@ -7,7 +7,7 @@ export default function Home() {
         <h1 className="font-heading text-xl text-neon-pink neon-text-pink sm:text-2xl">
           PROMPT WIZARD
         </h1>
-        <p className="mt-3 font-body text-base text-text-secondary">
+        <p className="mt-4 font-body text-lg text-text-secondary">
           Build structured prompts for AI coding tools. Fill the fields, earn XP,
           and craft the perfect prompt.
         </p>

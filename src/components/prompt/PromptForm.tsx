@@ -113,10 +113,10 @@ export function PromptForm({ initialData, promptId }: PromptFormProps) {
           <LevelBadge level={level.level} size="lg" />
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1">
-              <span className="font-code text-sm text-neon-yellow">
+              <span className="font-code text-base text-neon-yellow">
                 {totalXP} XP
               </span>
-              <span className="font-code text-xs text-text-muted">
+              <span className="font-code text-sm text-text-secondary">
                 / {level.maxXP === 999999 ? "MAX" : level.maxXP} XP
               </span>
             </div>
@@ -127,7 +127,7 @@ export function PromptForm({ initialData, promptId }: PromptFormProps) {
 
       {/* Prompt name */}
       <div className="mb-6">
-        <label className="block mb-2 font-heading text-xs text-text-secondary">
+        <label className="block mb-2 font-heading text-sm text-text-secondary">
           PROMPT NAME
         </label>
         <Input
