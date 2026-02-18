@@ -12,8 +12,10 @@ import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { useToast } from "@/components/ui/Toast";
 import { useAuth } from "@/hooks/useAuth";
+import { useSidebar } from "@/hooks/useSidebar";
 import { createClient } from "@/lib/supabase/client";
 import { getXPProgress, getLevelForXP } from "@/lib/xp";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface PromptFormProps {
@@ -23,6 +25,8 @@ interface PromptFormProps {
 
 export function PromptForm({ initialData, promptId }: PromptFormProps) {
   const { user, refreshProfile } = useAuth();
+  const { refreshPrompts } = useSidebar();
+  const router = useRouter();
   const { toast } = useToast();
   const [saving, setSaving] = useState(false);
 
@@ -65,19 +69,26 @@ export function PromptForm({ initialData, promptId }: PromptFormProps) {
         toast("Prompt saved!");
       } else {
         // Create new
-        const { error } = await supabase.from("prompts").insert({
-          user_id: user.id,
-          name: data.name,
-          title: data.title,
-          short_description: data.short_description,
-          design_language: data.design_language,
-          ui_elements: data.ui_elements,
-          user_flows: data.user_flows,
-          user_input_logic: data.user_input_logic,
-          xp_earned: totalXP,
-        });
+        const { data: newRow, error } = await supabase
+          .from("prompts")
+          .insert({
+            user_id: user.id,
+            name: data.name,
+            title: data.title,
+            short_description: data.short_description,
+            design_language: data.design_language,
+            ui_elements: data.ui_elements,
+            user_flows: data.user_flows,
+            user_input_logic: data.user_input_logic,
+            xp_earned: totalXP,
+          })
+          .select("id")
+          .single();
         if (error) throw error;
         toast("Prompt created!");
+        if (newRow) {
+          router.replace(`/?prompt=${newRow.id}`, { scroll: false });
+        }
       }
 
       // Update profile XP
@@ -90,6 +101,7 @@ export function PromptForm({ initialData, promptId }: PromptFormProps) {
         .eq("id", user.id);
 
       await refreshProfile();
+      await refreshPrompts();
     } catch {
       toast("Failed to save prompt", "error");
     } finally {

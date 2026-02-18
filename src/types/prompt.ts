@@ -29,6 +29,11 @@ export interface PromptData {
   updated_at?: string;
 }
 
+export interface PromptRow extends PromptData {
+  id: string;
+  user_id: string;
+}
+
 export const PROMPT_FIELDS: PromptField[] = [
   {
     key: "title",

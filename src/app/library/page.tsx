@@ -7,15 +7,12 @@ import { createClient } from "@/lib/supabase/client";
 import { PromptCard } from "@/components/library/PromptCard";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
-import type { PromptData } from "@/types/prompt";
-
-interface PromptRow extends PromptData {
-  id: string;
-  user_id: string;
-}
+import { useSidebar } from "@/hooks/useSidebar";
+import type { PromptRow } from "@/types/prompt";
 
 export default function LibraryPage() {
   const { user, loading: authLoading } = useAuth();
+  const { refreshPrompts } = useSidebar();
   const router = useRouter();
   const [prompts, setPrompts] = useState<PromptRow[]>([]);
   const [search, setSearch] = useState("");
@@ -53,6 +50,7 @@ export default function LibraryPage() {
     const supabase = createClient();
     await supabase.from("prompts").delete().eq("id", id);
     setPrompts((prev) => prev.filter((p) => p.id !== id));
+    await refreshPrompts();
   };
 
   if (authLoading || loading) {
