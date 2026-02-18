@@ -80,25 +80,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [user, fetchProfile]);
 
   useEffect(() => {
-    // Use getSession() for initial client-side check (no network call, no lock contention)
-    const init = async () => {
-      try {
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
-        const currentUser = session?.user ?? null;
-        setUser(currentUser);
-        if (currentUser) {
-          fetchProfile(currentUser); // fire-and-forget — don't block
-        }
-      } catch {
-        // Supabase not configured
-      }
-      setLoading(false);
-    };
-
-    init();
-
+    // Rely solely on onAuthStateChange — it fires INITIAL_SESSION immediately
+    // with the current session. Avoids calling getSession()/getUser() which
+    // can deadlock on the Navigator Lock.
     let subscription: { unsubscribe: () => void } | undefined;
     try {
       const { data } = supabase.auth.onAuthStateChange(
@@ -117,7 +101,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       );
       subscription = data.subscription;
     } catch {
-      // Supabase not configured
+      // Supabase not configured — stop loading
+      setLoading(false);
     }
 
     return () => subscription?.unsubscribe();
@@ -127,7 +112,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       await supabase.auth.signOut();
     } catch {
-      // Sign-out may fail if lock is held — clear state anyway
+      // Sign-out may fail if lock is held — clear cookies manually
+      document.cookie.split(";").forEach((c) => {
+        const name = c.split("=")[0].trim();
+        if (name.startsWith("sb-")) {
+          document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+        }
+      });
     }
     setUser(null);
     setProfile(null);
