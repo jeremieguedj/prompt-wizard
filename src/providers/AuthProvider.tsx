@@ -5,6 +5,7 @@ import {
   useEffect,
   useState,
   useCallback,
+  useRef,
   type ReactNode,
 } from "react";
 import { createClient } from "@/lib/supabase/client";
@@ -31,39 +32,42 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
-  const supabase = createClient();
+  const supabaseRef = useRef(createClient());
+  const supabase = supabaseRef.current;
 
   const fetchProfile = useCallback(
     async (authUser: User) => {
-      const { data } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", authUser.id)
-        .single();
-
-      if (data) {
-        setProfile(data);
-      } else {
-        // Profile doesn't exist yet — create one (handles cases where the
-        // database trigger didn't fire, e.g. OAuth or anonymous sign-ins)
-        const displayName =
-          authUser.user_metadata?.display_name ||
-          authUser.user_metadata?.full_name ||
-          authUser.user_metadata?.name ||
-          authUser.email?.split("@")[0] ||
-          "Prompt Wizard";
-
-        const { data: newProfile } = await supabase
+      try {
+        const { data } = await supabase
           .from("profiles")
-          .upsert({
-            id: authUser.id,
-            email: authUser.email ?? null,
-            display_name: displayName,
-          })
-          .select()
+          .select("*")
+          .eq("id", authUser.id)
           .single();
 
-        setProfile(newProfile);
+        if (data) {
+          setProfile(data);
+        } else {
+          const displayName =
+            authUser.user_metadata?.display_name ||
+            authUser.user_metadata?.full_name ||
+            authUser.user_metadata?.name ||
+            authUser.email?.split("@")[0] ||
+            "Prompt Wizard";
+
+          const { data: newProfile } = await supabase
+            .from("profiles")
+            .upsert({
+              id: authUser.id,
+              email: authUser.email ?? null,
+              display_name: displayName,
+            })
+            .select()
+            .single();
+
+          setProfile(newProfile);
+        }
+      } catch {
+        // Profile fetch failed — non-blocking
       }
     },
     [supabase]
@@ -76,30 +80,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [user, fetchProfile]);
 
   useEffect(() => {
-    const getUser = async () => {
+    // Use getSession() for initial client-side check (no network call, no lock contention)
+    const init = async () => {
       try {
         const {
-          data: { user },
-        } = await supabase.auth.getUser();
-        setUser(user);
-        if (user) {
-          await fetchProfile(user);
+          data: { session },
+        } = await supabase.auth.getSession();
+        const currentUser = session?.user ?? null;
+        setUser(currentUser);
+        if (currentUser) {
+          fetchProfile(currentUser); // fire-and-forget — don't block
         }
       } catch {
-        // Supabase not configured — continue as anonymous
+        // Supabase not configured
       }
       setLoading(false);
     };
 
-    getUser();
+    init();
 
     let subscription: { unsubscribe: () => void } | undefined;
     try {
       const { data } = supabase.auth.onAuthStateChange(
-        async (_event, session) => {
-          setUser(session?.user ?? null);
-          if (session?.user) {
-            await fetchProfile(session.user);
+        (_event, session) => {
+          // Keep this callback synchronous — never await inside onAuthStateChange
+          // as it holds the Navigator Lock and will deadlock other auth calls
+          const currentUser = session?.user ?? null;
+          setUser(currentUser);
+          if (currentUser) {
+            fetchProfile(currentUser); // fire-and-forget
           } else {
             setProfile(null);
           }
@@ -115,7 +124,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [supabase, fetchProfile]);
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    try {
+      await supabase.auth.signOut();
+    } catch {
+      // Sign-out may fail if lock is held — clear state anyway
+    }
     setUser(null);
     setProfile(null);
     window.location.href = "/";
