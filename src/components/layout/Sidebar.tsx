@@ -143,7 +143,7 @@ export function Sidebar() {
   return (
     <>
       {/* Desktop sidebar — always visible */}
-      <aside className="hidden md:flex md:w-64 md:flex-shrink-0 md:flex-col border-r border-sw-border bg-sw-surface/50">
+      <aside className="hidden md:sticky md:top-[59px] md:flex md:w-64 md:flex-shrink-0 md:flex-col md:h-[calc(100vh-59px)] md:overflow-y-auto border-r border-sw-border bg-sw-surface/50">
         <SidebarShell>
           <SidebarContent />
         </SidebarShell>
