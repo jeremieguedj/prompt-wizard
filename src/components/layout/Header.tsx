@@ -35,21 +35,21 @@ export function Header() {
                 <div className="w-32">
                   <XPBar percentage={progress.percentage} size="sm" />
                 </div>
-                <span className="font-code text-[10px] text-text-secondary">
+                <span className="font-code text-xs text-text-secondary">
                   {totalXP} XP
                 </span>
               </div>
 
               <Link
                 href="/library"
-                className="font-body text-xs text-text-secondary hover:text-neon-cyan transition-colors"
+                className="font-body text-sm text-text-secondary hover:text-neon-cyan transition-colors"
               >
                 Library
               </Link>
 
               <button
                 onClick={signOut}
-                className="font-body text-xs text-text-muted hover:text-neon-pink transition-colors"
+                className="font-body text-sm text-text-secondary hover:text-neon-pink transition-colors"
               >
                 Sign out
               </button>
@@ -58,13 +58,13 @@ export function Header() {
             <>
               <Link
                 href="/login"
-                className="font-body text-xs text-text-secondary hover:text-neon-cyan transition-colors"
+                className="font-body text-sm text-text-secondary hover:text-neon-cyan transition-colors"
               >
                 Log in
               </Link>
               <Link
                 href="/signup"
-                className="rounded-md border border-neon-pink/50 px-3 py-1.5 font-body text-xs text-neon-pink hover:bg-neon-pink/10 transition-colors"
+                className="rounded-md border border-neon-pink/50 px-3 py-1.5 font-body text-sm text-neon-pink hover:bg-neon-pink/10 transition-colors"
               >
                 Sign up
               </Link>

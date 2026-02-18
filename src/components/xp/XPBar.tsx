@@ -11,6 +11,11 @@ export function XPBar({ percentage, size = "md" }: XPBarProps) {
   return (
     <div
       className={`w-full overflow-hidden rounded-full bg-sw-surface-light ${heights[size]}`}
+      role="progressbar"
+      aria-valuenow={Math.round(percentage)}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-label="XP progress"
     >
       <div
         className={`${heights[size]} xp-bar-shimmer rounded-full transition-all duration-500 ease-out`}

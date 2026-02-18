@@ -30,17 +30,17 @@ export function AnonBanner() {
   }, []);
 
   return (
-    <div className="mb-6 flex flex-col gap-2 rounded-lg border border-neon-yellow/30 bg-neon-yellow/5 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+    <div role="status" className="mb-6 flex flex-col gap-2 rounded-lg border border-neon-yellow/30 bg-neon-yellow/5 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
       <div className="flex items-center gap-2">
-        <span className="text-neon-yellow text-sm">&#9888;</span>
-        <span className="font-body text-xs text-neon-yellow/90">
+        <span className="text-neon-yellow text-sm" role="img" aria-label="Warning">&#9888;</span>
+        <span className="font-body text-sm text-neon-yellow/90">
           Your work is saved locally
           {timeLeft && ` — expires in ${timeLeft}`}.
         </span>
       </div>
       <Link
         href="/signup"
-        className="font-body text-xs text-neon-cyan hover:text-neon-pink transition-colors underline underline-offset-2"
+        className="font-body text-sm text-neon-cyan hover:text-neon-pink transition-colors underline underline-offset-2"
       >
         Create an account to save permanently
       </Link>

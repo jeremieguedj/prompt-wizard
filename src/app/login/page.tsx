@@ -49,16 +49,17 @@ export default function LoginPage() {
   return (
     <div className="mx-auto flex min-h-[70vh] max-w-md items-center px-4">
       <Card className="w-full p-6 sm:p-8">
-        <h1 className="mb-6 text-center font-heading text-sm text-neon-cyan neon-text-cyan">
+        <h1 className="mb-6 text-center font-heading text-base text-neon-cyan neon-text-cyan sm:text-lg">
           LOG IN
         </h1>
 
         <form onSubmit={handleLogin} className="flex flex-col gap-4">
           <div>
-            <label className="mb-1 block font-body text-xs text-text-secondary">
+            <label htmlFor="login-email" className="mb-1 block font-body text-sm text-text-secondary">
               Email
             </label>
             <Input
+              id="login-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -68,10 +69,11 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label className="mb-1 block font-body text-xs text-text-secondary">
+            <label htmlFor="login-password" className="mb-1 block font-body text-sm text-text-secondary">
               Password
             </label>
             <Input
+              id="login-password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -81,7 +83,7 @@ export default function LoginPage() {
           </div>
 
           {error && (
-            <p className="font-body text-xs text-neon-pink">{error}</p>
+            <p className="font-body text-sm text-neon-pink" role="alert">{error}</p>
           )}
 
           <Button type="submit" disabled={loading} className="w-full">
@@ -91,7 +93,7 @@ export default function LoginPage() {
 
         <div className="my-5 flex items-center gap-3">
           <div className="h-px flex-1 bg-sw-border" />
-          <span className="font-body text-[10px] text-text-muted">OR</span>
+          <span className="font-body text-xs text-text-muted">OR</span>
           <div className="h-px flex-1 bg-sw-border" />
         </div>
 
@@ -103,7 +105,7 @@ export default function LoginPage() {
           Continue with Google
         </Button>
 
-        <p className="mt-5 text-center font-body text-xs text-text-muted">
+        <p className="mt-5 text-center font-body text-sm text-text-muted">
           Don&apos;t have an account?{" "}
           <Link
             href="/signup"

@@ -13,9 +13,9 @@ export function LevelBadge({ level, size = "md" }: LevelBadgeProps) {
   const glowIntensity = Math.min(level / 10, 1);
 
   const sizes = {
-    sm: "w-7 h-7 text-[9px]",
-    md: "w-10 h-10 text-xs",
-    lg: "w-14 h-14 text-sm",
+    sm: "w-8 h-8 text-xs",
+    md: "w-11 h-11 text-sm",
+    lg: "w-14 h-14 text-base",
   };
 
   return (
@@ -23,9 +23,9 @@ export function LevelBadge({ level, size = "md" }: LevelBadgeProps) {
       <div
         className={`${sizes[size]} flex items-center justify-center rounded-full border-2 border-neon-purple bg-sw-surface font-heading text-neon-purple`}
         style={{
-          boxShadow: `0 0 ${8 * glowIntensity}px rgba(176, 38, 255, ${
+          boxShadow: `0 0 ${8 * glowIntensity}px rgba(200, 88, 255, ${
             0.3 + glowIntensity * 0.4
-          }), 0 0 ${20 * glowIntensity}px rgba(176, 38, 255, ${
+          }), 0 0 ${20 * glowIntensity}px rgba(200, 88, 255, ${
             0.1 + glowIntensity * 0.2
           })`,
         }}
@@ -33,7 +33,7 @@ export function LevelBadge({ level, size = "md" }: LevelBadgeProps) {
         {level}
       </div>
       {size !== "sm" && (
-        <span className="font-body text-[10px] text-text-secondary">
+        <span className="font-body text-xs text-text-secondary">
           {levelInfo.title}
         </span>
       )}

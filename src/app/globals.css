@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 
 /* ── Synthwave Theme Tokens ── */
@@ -10,16 +10,17 @@
 
   --color-neon-pink: #ff2d95;
   --color-neon-cyan: #00f0ff;
-  --color-neon-purple: #b026ff;
+  --color-neon-purple: #c858ff;
   --color-neon-yellow: #ffe156;
   --color-neon-green: #39ff14;
 
   --color-text-primary: #e8e6f0;
   --color-text-secondary: #8888aa;
-  --color-text-muted: #555577;
+  --color-text-muted: #8585a8;
 
   --font-heading: "Press Start 2P", monospace;
-  --font-body: "Orbitron", sans-serif;
+  --font-display: "Orbitron", sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
   --font-code: "Fira Code", monospace;
 
   --animate-glow-pulse: glow-pulse 2s ease-in-out infinite;
@@ -188,4 +189,13 @@ body {
   background-size: 50px 50px;
   opacity: 0.3;
   animation: grid-scroll 20s linear infinite;
+}
+
+/* ── Reduced Motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

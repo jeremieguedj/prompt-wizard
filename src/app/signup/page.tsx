@@ -90,10 +90,10 @@ export default function SignupPage() {
     return (
       <div className="mx-auto flex min-h-[70vh] max-w-md items-center px-4">
         <Card className="w-full p-6 text-center sm:p-8">
-          <h1 className="mb-4 font-heading text-sm text-neon-green">
+          <h1 className="mb-4 font-heading text-base text-neon-green sm:text-lg">
             CHECK YOUR EMAIL
           </h1>
-          <p className="font-body text-xs text-text-secondary leading-relaxed">
+          <p className="font-body text-sm text-text-secondary leading-relaxed">
             We sent a confirmation link to <strong>{email}</strong>. Click it to
             activate your account.
           </p>
@@ -105,16 +105,17 @@ export default function SignupPage() {
   return (
     <div className="mx-auto flex min-h-[70vh] max-w-md items-center px-4">
       <Card className="w-full p-6 sm:p-8">
-        <h1 className="mb-6 text-center font-heading text-sm text-neon-cyan neon-text-cyan">
+        <h1 className="mb-6 text-center font-heading text-base text-neon-cyan neon-text-cyan sm:text-lg">
           SIGN UP
         </h1>
 
         <form onSubmit={handleSignup} className="flex flex-col gap-4">
           <div>
-            <label className="mb-1 block font-body text-xs text-text-secondary">
+            <label htmlFor="signup-name" className="mb-1 block font-body text-sm text-text-secondary">
               Display Name
             </label>
             <Input
+              id="signup-name"
               type="text"
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
@@ -123,10 +124,11 @@ export default function SignupPage() {
           </div>
 
           <div>
-            <label className="mb-1 block font-body text-xs text-text-secondary">
+            <label htmlFor="signup-email" className="mb-1 block font-body text-sm text-text-secondary">
               Email
             </label>
             <Input
+              id="signup-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -136,10 +138,11 @@ export default function SignupPage() {
           </div>
 
           <div>
-            <label className="mb-1 block font-body text-xs text-text-secondary">
+            <label htmlFor="signup-password" className="mb-1 block font-body text-sm text-text-secondary">
               Password
             </label>
             <Input
+              id="signup-password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -150,7 +153,7 @@ export default function SignupPage() {
           </div>
 
           {error && (
-            <p className="font-body text-xs text-neon-pink">{error}</p>
+            <p className="font-body text-sm text-neon-pink" role="alert">{error}</p>
           )}
 
           <Button type="submit" disabled={loading} className="w-full">
@@ -160,7 +163,7 @@ export default function SignupPage() {
 
         <div className="my-5 flex items-center gap-3">
           <div className="h-px flex-1 bg-sw-border" />
-          <span className="font-body text-[10px] text-text-muted">OR</span>
+          <span className="font-body text-xs text-text-muted">OR</span>
           <div className="h-px flex-1 bg-sw-border" />
         </div>
 
@@ -172,7 +175,7 @@ export default function SignupPage() {
           Continue with Google
         </Button>
 
-        <p className="mt-5 text-center font-body text-xs text-text-muted">
+        <p className="mt-5 text-center font-body text-sm text-text-muted">
           Already have an account?{" "}
           <Link
             href="/login"

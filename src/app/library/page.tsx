@@ -68,7 +68,7 @@ export default function LibraryPage() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 sm:py-12">
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="font-heading text-sm text-neon-cyan neon-text-cyan">
+        <h1 className="font-heading text-base text-neon-cyan neon-text-cyan sm:text-lg">
           YOUR PROMPTS
         </h1>
         <div className="flex items-center gap-3">
